@@ -1,22 +1,190 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Excel Converter</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{font-family:Arial;background:#667eea;height:100vh;display:flex;align-items:center;justify-content:center;}
-.card{background:#fff;padding:30px;border-radius:12px;width:400px;text-align:center;}
-button{padding:12px;width:100%;background:#667eea;color:#fff;border:none;border-radius:8px;}
-</style>
+  <meta charset="UTF-8" />
+  <title>Instacart → DoorDash Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px);
+      border-radius: 22px;
+      padding: 40px;
+      width: 420px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+      text-align: center;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .upload-box {
+      border: 2px dashed rgba(255,255,255,0.45);
+      border-radius: 18px;
+      padding: 32px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upload-box.dragover {
+      background: rgba(74, 222, 128, 0.15);
+      border-color: #4ade80;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .upload-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .filename {
+      margin-top: 10px;
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
+    button {
+      margin-top: 26px;
+      width: 100%;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      color: #0f2027;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(34,197,94,0.4);
+    }
+
+    .loader {
+      display: none;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .success {
+      display: none;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 22px;
+      font-size: 11px;
+      opacity: 0.7;
+    }
+  </style>
 </head>
+
 <body>
+
 <div class="card">
-<h2>Excel A → B Converter</h2>
-<form method="POST" enctype="multipart/form-data">
-<input type="file" name="file" required><br><br>
-<button type="submit">Convert & Download</button>
-</form>
+  <div class="badge">Excel Automation Tool</div>
+
+  <h1>Instacart → DoorDash</h1>
+  <p>
+    Upload your <b>Instacart format</b> Excel file and instantly download a
+    <b>DoorDash-ready</b> file.
+  </p>
+
+  <form method="POST" enctype="multipart/form-data" onsubmit="startLoading()">
+    <label class="upload-box" id="uploadBox">
+      <input type="file" name="file" id="fileInput" required />
+      <div class="upload-text">📂 Click or Drag & Drop Excel (.xlsx)</div>
+      <div class="filename" id="fileName"></div>
+    </label>
+
+    <button type="submit">Convert & Download</button>
+
+    <div class="loader" id="loader">⏳ Converting file…</div>
+    <div class="success" id="success">✔ Conversion Complete</div>
+  </form>
+
+  <footer>
+    Fast • Secure • No Manual Excel Work
+  </footer>
 </div>
+
+<script>
+  const fileInput = document.getElementById("fileInput");
+  const fileName = document.getElementById("fileName");
+  const uploadBox = document.getElementById("uploadBox");
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files.length > 0) {
+      fileName.textContent = fileInput.files[0].name;
+    }
+  });
+
+  uploadBox.addEventListener("dragover", e => {
+    e.preventDefault();
+    uploadBox.classList.add("dragover");
+  });
+
+  uploadBox.addEventListener("dragleave", () => {
+    uploadBox.classList.remove("dragover");
+  });
+
+  uploadBox.addEventListener("drop", e => {
+    e.preventDefault();
+    uploadBox.classList.remove("dragover");
+    fileInput.files = e.dataTransfer.files;
+    fileName.textContent = e.dataTransfer.files[0].name;
+  });
+
+  function startLoading() {
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("success").style.display = "none";
+  }
+</script>
+
 </body>
 </html>
