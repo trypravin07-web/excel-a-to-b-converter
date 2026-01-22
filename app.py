@@ -9,25 +9,27 @@ def index():
         file = request.files["file"]
         df = pd.read_excel(file)
 
+        def col(name):
+            return df[name] if name in df.columns else ""
+
         df_b = pd.DataFrame({
-            "store_id": df["store_identifier"],
-            "sku_id": df["lookup_code"],
-            "name": df["item_name"],
-            "size": df["size"],
-            "description": df["size_uom"],        # ✅ FINAL FIX
-            "cost_unit": df["cost_unit"],
-            "price": df["price"],
-            "department": df["department"],
-            "aisle": df["aisle"],
+            "store_id": col("store_identifier"),
+            "sku_id": col("lookup_code"),
+            "name": col("item_name"),
+            "size": col("size"),
+            "description": col("size_uom"),
+            "cost_unit": col("cost_unit"),
+            "price": col("price"),
+            "department": col("department"),
+            "aisle": col("aisle"),
             "is_active": "",
             "is_alcohol": "",
             "is_weighted_item": "",
-            "image_URL": df["remote_image_URL"]
+            "image_URL": col("remote_image_URL")
         })
 
-        output = "B_converted.xlsx"
+        output = "DoorDash_Formatted.xlsx"
         df_b.to_excel(output, index=False)
-
         return send_file(output, as_attachment=True)
 
     return render_template("index.html")
